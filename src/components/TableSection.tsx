@@ -1,9 +1,11 @@
 "use client";
 
+import { addUcsur } from "@/utils/ucsur";
 import React from "react";
 
 type Row = {
-  [key: string]: string;
+  hits: string;
+  word: string;
 };
 
 type Props = {
@@ -12,7 +14,12 @@ type Props = {
 };
 
 export default function TableSection({ title, rows }: Props) {
-  if (rows.length === 0) return null;
+  if (rows.length === 0)
+    return (
+      <section>
+        <h2>dist = {title}</h2>
+      </section>
+    );
 
   return (
     <section>
@@ -28,9 +35,8 @@ export default function TableSection({ title, rows }: Props) {
         <tbody>
           {rows.map((row, idx) => (
             <tr key={idx}>
-              {Object.values(row).map((val, i) => (
-                <td key={i}>{val}</td>
-              ))}
+              <td key={0}>{row.hits}</td>
+              <td key={1}>{addUcsur(row.word)}</td>
             </tr>
           ))}
         </tbody>

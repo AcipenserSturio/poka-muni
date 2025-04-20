@@ -1,6 +1,20 @@
+@font-face {
+    font-family: "nasin-nanpa";
+    src: url("/static/nasin-nanpa.otf") format("opentype");
+    font-weight: normal;
+    font-style: normal;
+    unicode-range: U+F1900-F19FF;
+}
+
+:root {
+    font-family: "nasin-nanpa", serif;
+}
 .tables {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
+}
+section {
+    border: 1px solid #aaa;
 }
 h2 {
     text-align: center;
@@ -23,6 +37,7 @@ th {
 input {
     font-size: 300%;
     text-align: center;
+    width: 50%;
 }
 
 /* :root {

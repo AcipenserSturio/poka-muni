@@ -6,20 +6,20 @@ import TableSection from "@/components/TableSection";
 const LINK =
   "https://raw.githubusercontent.com/AcipenserSturio/poka-muni/refs/heads/main/public/data.csv"; // Replace with your actual CSV URL
 
-type Row = {
+type RawRow = {
   [key: string]: string;
 };
 
 const DIST_VALUES = ["-5", "-4", "-3", "-2", "-1", "1", "2", "3", "4", "5"];
 
 export default function SearchPage() {
-  const [data, setData] = useState<Row[]>([]);
+  const [data, setData] = useState<RawRow[]>([]);
   const [search, setSearch] = useState("");
-  const [filtered, setFiltered] = useState<Row[]>([]);
+  const [filtered, setFiltered] = useState<RawRow[]>([]);
 
   // Load CSV
   useEffect(() => {
-    Papa.parse<Row>(LINK, {
+    Papa.parse<RawRow>(LINK, {
       download: true,
       header: true,
       complete: (results) => {
@@ -41,14 +41,14 @@ export default function SearchPage() {
   }, [search, data]);
 
   // Group filtered rows by `dist`
-  const grouped: { [key: string]: Row[] } = {};
+  const grouped: { [key: string]: RawRow[] } = {};
   for (const value of DIST_VALUES) {
     grouped[value] = [];
   }
   for (const row of filtered) {
     const dist = row.dist;
     if (DIST_VALUES.includes(dist)) {
-      grouped[dist].push({ word: row.last, hits: row.hits });
+      grouped[dist].push({ hits: row.hits, word: row.last });
     }
   }
 

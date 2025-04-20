@@ -1,7 +1,11 @@
 import Head from "next/head";
-
 import SearchPage from "@/components/SearchPage";
+import localFont from "next/font/local";
 
+// const spFont = localFont({
+//   src: "nasin-nanpa.otf",
+//   declarations: [{ prop: "unicode-range", value: "U+F1900-F19FF" }],
+// });
 export default function Home() {
   return (
     <>
@@ -11,7 +15,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {/* <div className={spFont.className}> */}
       <SearchPage></SearchPage>
+      {/* </div> */}
     </>
   );
 }
