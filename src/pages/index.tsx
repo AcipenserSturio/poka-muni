@@ -1,71 +1,6 @@
 import Head from "next/head";
 
-import React, { useEffect, useState } from "react";
-import Papa from "papaparse";
-
-const LINK =
-  "https://raw.githubusercontent.com/AcipenserSturio/poka-muni/refs/heads/main/public/data.csv"; // Replace with your actual CSV URL
-
-type Row = {
-  [key: string]: string;
-};
-
-export function CsvTable() {
-  const [data, setData] = useState<Row[]>([]);
-  const [filtered, setFiltered] = useState<Row[]>([]);
-  const [search, setSearch] = useState("");
-
-  // Load CSV from LINK
-  useEffect(() => {
-    Papa.parse<Row>(LINK, {
-      download: true,
-      header: true,
-      complete: (results) => {
-        console.log("Parsed CSV:", results.data);
-        setData(results.data);
-      },
-      error: (err) => {
-        console.error("CSV Load Error:", err);
-      },
-    });
-  }, []);
-
-  // Filter rows by the "word" column
-  useEffect(() => {
-    const subset = data.filter(
-      (row) => row.first && row.first.toLowerCase() === search.toLowerCase(),
-    );
-    setFiltered(subset);
-  }, [search, data]);
-
-  return (
-    <main>
-      <input
-        type="text"
-        placeholder="Search by word..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      <table>
-        <thead>
-          <tr>
-            {filtered.length > 0 &&
-              Object.keys(filtered[0]).map((key) => <th key={key}>{key}</th>)}
-          </tr>
-        </thead>
-        <tbody>
-          {filtered.map((row, idx) => (
-            <tr key={idx}>
-              {Object.values(row).map((val, i) => (
-                <td key={i}>{val}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </main>
-  );
-}
+import SearchPage from "@/components/SearchPage";
 
 export default function Home() {
   return (
@@ -76,7 +11,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <CsvTable></CsvTable>
+      <SearchPage></SearchPage>
     </>
   );
 }
