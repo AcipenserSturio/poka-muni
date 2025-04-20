@@ -9,11 +9,13 @@ type Props = {
 
 export default function SearchInput({ value, onChange }: Props) {
   return (
-    <input
-      type="text"
-      placeholder="Search by word..."
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-    />
+    <center>
+      <input
+        type="text"
+        placeholder="Search by word..."
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </center>
   );
 }

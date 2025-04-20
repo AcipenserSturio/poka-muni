@@ -53,11 +53,13 @@ export default function SearchPage() {
   }
 
   return (
-    <main className="p-4 max-w-5xl mx-auto">
+    <main>
       <SearchInput value={search} onChange={setSearch} />
-      {DIST_VALUES.map((dist) => (
-        <TableSection key={dist} title={dist} rows={grouped[dist]} />
-      ))}
+      <div className="tables">
+        {DIST_VALUES.map((dist) => (
+          <TableSection key={dist} title={dist} rows={grouped[dist]} />
+        ))}
+      </div>
     </main>
   );
 }
