@@ -9,6 +9,10 @@ const LINK =
 type RawRow = {
   [key: string]: string;
 };
+type Row = {
+  hits: string;
+  word: string;
+};
 
 const DIST_VALUES = ["-5", "-4", "-3", "-2", "-1", "1", "2", "3", "4", "5"];
 
@@ -41,7 +45,7 @@ export default function SearchPage() {
   }, [search, data]);
 
   // Group filtered rows by `dist`
-  const grouped: { [key: string]: RawRow[] } = {};
+  const grouped: { [key: string]: Row[] } = {};
   for (const value of DIST_VALUES) {
     grouped[value] = [];
   }
