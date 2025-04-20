@@ -14,7 +14,8 @@ type Row = {
   word: string;
 };
 
-const DIST_VALUES = ["-5", "-4", "-3", "-2", "-1", "1", "2", "3", "4", "5"];
+// const DIST_VALUES = ["-5", "-4", "-3", "-2", "-1", "1", "2", "3", "4", "5"];
+const DIST_VALUES = ["-4", "-3", "-2", "-1", "1", "2", "3", "4"];
 
 export default function SearchPage() {
   const [data, setData] = useState<RawRow[]>([]);
