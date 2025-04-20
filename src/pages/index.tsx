@@ -1,17 +1,71 @@
 import Head from "next/head";
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
-import styles from "@/styles/Home.module.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import React, { useEffect, useState } from "react";
+import Papa from "papaparse";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const LINK =
+  "https://raw.githubusercontent.com/AcipenserSturio/poka-muni/refs/heads/main/public/data.csv"; // Replace with your actual CSV URL
+
+type Row = {
+  [key: string]: string;
+};
+
+export function CsvTable() {
+  const [data, setData] = useState<Row[]>([]);
+  const [filtered, setFiltered] = useState<Row[]>([]);
+  const [search, setSearch] = useState("");
+
+  // Load CSV from LINK
+  useEffect(() => {
+    Papa.parse<Row>(LINK, {
+      download: true,
+      header: true,
+      complete: (results) => {
+        console.log("Parsed CSV:", results.data);
+        setData(results.data);
+      },
+      error: (err) => {
+        console.error("CSV Load Error:", err);
+      },
+    });
+  }, []);
+
+  // Filter rows by the "word" column
+  useEffect(() => {
+    const subset = data.filter(
+      (row) => row.first && row.first.toLowerCase() === search.toLowerCase(),
+    );
+    setFiltered(subset);
+  }, [search, data]);
+
+  return (
+    <main>
+      <input
+        type="text"
+        placeholder="Search by word..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+      <table>
+        <thead>
+          <tr>
+            {filtered.length > 0 &&
+              Object.keys(filtered[0]).map((key) => <th key={key}>{key}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {filtered.map((row, idx) => (
+            <tr key={idx}>
+              {Object.values(row).map((val, i) => (
+                <td key={i}>{val}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </main>
+  );
+}
 
 export default function Home() {
   return (
@@ -22,96 +76,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div
-        className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
-      >
-        <main className={styles.main}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js logo"
-            width={180}
-            height={38}
-            priority
-          />
-          <ol>
-            <li>
-              Get started by editing <code>src/pages/index.tsx</code>.
-            </li>
-            <li>Save and see your changes instantly.</li>
-          </ol>
-
-          <div className={styles.ctas}>
-            <a
-              className={styles.primary}
-              href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                className={styles.logo}
-                src="/vercel.svg"
-                alt="Vercel logomark"
-                width={20}
-                height={20}
-              />
-              Deploy now
-            </a>
-            <a
-              href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.secondary}
-            >
-              Read our docs
-            </a>
-          </div>
-        </main>
-        <footer className={styles.footer}>
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              aria-hidden
-              src="/file.svg"
-              alt="File icon"
-              width={16}
-              height={16}
-            />
-            Learn
-          </a>
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              aria-hidden
-              src="/window.svg"
-              alt="Window icon"
-              width={16}
-              height={16}
-            />
-            Examples
-          </a>
-          <a
-            href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              aria-hidden
-              src="/globe.svg"
-              alt="Globe icon"
-              width={16}
-              height={16}
-            />
-            Go to nextjs.org →
-          </a>
-        </footer>
-      </div>
+      <CsvTable></CsvTable>
     </>
   );
 }
